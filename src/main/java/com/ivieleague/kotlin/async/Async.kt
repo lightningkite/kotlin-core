@@ -65,3 +65,75 @@ fun <T> doAsync(action: () -> T, uiThread: (T) -> Unit) {
 fun doUiThread(action: () -> Unit) {
     Async.uiThreadInterface.sendToThread(action)
 }
+
+
+inline fun <T> List<T>.withEachAsync(doTask: T.(() -> Unit) -> Unit, crossinline onAllComplete: () -> Unit) {
+    if (isEmpty()) {
+        onAllComplete()
+        return
+    }
+    var itemsToGo = size
+    for (item in this) {
+        item.doTask {
+            itemsToGo--
+            if (itemsToGo <= 0) {
+                onAllComplete()
+            }
+        }
+    }
+}
+
+inline fun <T, MUTABLE, RESULT> List<T>.withReduceAsync(
+        doTask: T.((RESULT) -> Unit) -> Unit,
+        initialValue: MUTABLE,
+        crossinline combine: MUTABLE.(RESULT) -> Unit,
+        crossinline onAllComplete: (MUTABLE) -> Unit
+) {
+    if (isEmpty()) {
+        onAllComplete(initialValue)
+        return
+    }
+    var total = initialValue
+    var itemsToGo = size
+    for (item in this) {
+        item.doTask {
+            combine(total, it)
+            itemsToGo--
+            if (itemsToGo <= 0) {
+                onAllComplete(total)
+            }
+        }
+    }
+}
+
+inline fun parallel(tasks: Collection<(() -> Unit) -> Unit>, crossinline onComplete: () -> Unit) {
+    if (tasks.isEmpty()) {
+        onComplete()
+        return
+    }
+    var itemsToGo = tasks.size
+    for (item in tasks) {
+        item {
+            itemsToGo--
+            if (itemsToGo <= 0) {
+                onComplete()
+            }
+        }
+    }
+}
+
+inline fun parallel(vararg tasks: (() -> Unit) -> Unit, crossinline onComplete: () -> Unit) {
+    if (tasks.isEmpty()) {
+        onComplete()
+        return
+    }
+    var itemsToGo = tasks.size
+    for (item in tasks) {
+        item {
+            itemsToGo--
+            if (itemsToGo <= 0) {
+                onComplete()
+            }
+        }
+    }
+}
