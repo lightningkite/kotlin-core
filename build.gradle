@@ -9,6 +9,7 @@ buildscript {
 }
 
 apply plugin: 'kotlin'
+apply plugin: 'java'
 apply plugin: 'maven'
 
 group = "com.github.shanelk"
