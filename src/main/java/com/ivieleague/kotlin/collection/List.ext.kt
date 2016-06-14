@@ -9,7 +9,7 @@ inline fun <E> List<E>.random(): E {
     return this[Math.random().times(size).toInt()]
 }
 
-inline fun <E> MutableList<E>.addSorted(item: E, compare: (E, E) -> Boolean): Int {
+fun <E> MutableList<E>.addSorted(item: E, compare: (E, E) -> Boolean): Int {
     var index = 0
     for (it in this) {
         if (compare(item, it)) {
@@ -21,7 +21,7 @@ inline fun <E> MutableList<E>.addSorted(item: E, compare: (E, E) -> Boolean): In
     return index
 }
 
-inline fun <E : Comparable<E>> MutableList<E>.addSorted(item: E): Int {
+fun <E : Comparable<E>> MutableList<E>.addSorted(item: E): Int {
     var index = 0
     for (it in this) {
         if (item.compareTo(it) < 0) {
