@@ -2,6 +2,7 @@ package com.lightningkite.kotlin.stream
 
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
+import java.nio.charset.Charset
 
 fun InputStream.toByteArray(): ByteArray {
     val output = ByteArrayOutputStream()
@@ -31,4 +32,8 @@ fun InputStream.toString(charset: String): String {
     } finally {
         output.close()
     }
+}
+
+fun InputStream.toString(charset: Charset): String {
+    return toByteArray().toString(charset)
 }
