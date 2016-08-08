@@ -19,3 +19,34 @@ class MappedList<S, T>(val around: List<S>, val mapper: (S) -> T, val reverseMap
 }
 
 fun <S, T> List<S>.mapped(mapper: (S) -> T, reverseMapper: (T) -> S): List<T> = MappedList(this, mapper, reverseMapper)
+
+class MappedMutableList<S, T>(val around: MutableList<S>, val mapper: (S) -> T, val reverseMapper: (T) -> S) : MutableList<T> {
+    override fun add(element: T): Boolean = around.add(reverseMapper(element))
+    override fun add(index: Int, element: T) = around.add(index, reverseMapper(element))
+    override fun addAll(index: Int, elements: Collection<T>): Boolean = around.addAll(index, elements.map(reverseMapper))
+    override fun addAll(elements: Collection<T>): Boolean = around.addAll(elements.map(reverseMapper))
+    override fun clear() = around.clear()
+    override fun remove(element: T): Boolean = around.remove(reverseMapper(element))
+    override fun removeAll(elements: Collection<T>): Boolean = around.removeAll(elements.map(reverseMapper))
+    override fun removeAt(index: Int): T = mapper(around.removeAt(index))
+    override fun retainAll(elements: Collection<T>): Boolean = around.retainAll(elements.map(reverseMapper))
+    override fun set(index: Int, element: T): T {
+        around[index] = reverseMapper(element)
+        return element
+    }
+
+    override fun contains(element: T): Boolean = around.contains(reverseMapper(element))
+    override fun containsAll(elements: Collection<T>): Boolean = around.containsAll(elements.map(reverseMapper))
+    override fun get(index: Int): T = mapper(around.get(index))
+    override fun indexOf(element: T): Int = around.indexOf(reverseMapper(element))
+    override fun isEmpty(): Boolean = around.isEmpty()
+    override fun iterator(): MutableIterator<T> = around.iterator().mapped(mapper, reverseMapper)
+    override fun lastIndexOf(element: T): Int = around.lastIndexOf(reverseMapper(element))
+    override fun listIterator(): MutableListIterator<T> = around.listIterator().mapped(mapper, reverseMapper)
+    override fun listIterator(index: Int): MutableListIterator<T> = around.listIterator(index).mapped(mapper, reverseMapper)
+    override fun subList(fromIndex: Int, toIndex: Int): MutableList<T> = around.subList(fromIndex, toIndex).mappedMutable(mapper, reverseMapper)
+    override val size: Int get() = around.size
+
+}
+
+fun <S, T> MutableList<S>.mappedMutable(mapper: (S) -> T, reverseMapper: (T) -> S): MutableList<T> = MappedMutableList(this, mapper, reverseMapper)
