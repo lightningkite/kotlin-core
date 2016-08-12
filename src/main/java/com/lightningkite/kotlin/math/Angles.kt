@@ -32,17 +32,3 @@ fun Double.degreesTo(to: Double): Double {
 fun Double.radiansTo(to: Double): Double {
     return ((to - this + Math.PI).remainder(Math.PI * 2)) - Math.PI
 }
-
-/**
- * Similar to modulus, but works differently with negatives.
- */
-fun Float.remainder(divisor: Float): Float {
-    return this - Math.floor(this.toDouble() / divisor).toFloat() * divisor
-}
-
-/**
- * Similar to modulus, but works differently with negatives.
- */
-fun Double.remainder(divisor: Double): Double {
-    return this - Math.floor(this / divisor) * divisor
-}

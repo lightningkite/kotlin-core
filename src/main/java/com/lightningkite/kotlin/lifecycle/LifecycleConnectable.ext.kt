@@ -17,6 +17,48 @@ fun <T> LifecycleConnectable.listen(collection: MutableCollection<T>, item: T) {
     })
 }
 
+fun <A, B> LifecycleConnectable.listen(eventA: MutableCollection<(A) -> Unit>, eventB: MutableCollection<(B) -> Unit>, listener: () -> Unit) {
+    connect(object : LifecycleListener {
+        val listenerA = { it: A -> listener() }
+        val listenerB = { it: B -> listener() }
+
+        override fun onStart() {
+            eventA.add(listenerA)
+            eventB.add(listenerB)
+        }
+
+        override fun onStop() {
+            eventA.remove(listenerA)
+            eventB.remove(listenerB)
+        }
+    })
+}
+
+fun <A, B, C> LifecycleConnectable.listen(
+        eventA: MutableCollection<(A) -> Unit>,
+        eventB: MutableCollection<(B) -> Unit>,
+        eventC: MutableCollection<(C) -> Unit>,
+        listener: () -> Unit
+) {
+    connect(object : LifecycleListener {
+        val listenerA = { it: A -> listener() }
+        val listenerB = { it: B -> listener() }
+        val listenerC = { it: C -> listener() }
+
+        override fun onStart() {
+            eventA.add(listenerA)
+            eventB.add(listenerB)
+            eventC.add(listenerC)
+        }
+
+        override fun onStop() {
+            eventA.remove(listenerA)
+            eventB.remove(listenerB)
+            eventC.remove(listenerC)
+        }
+    })
+}
+
 fun <T> LifecycleConnectable.bind(event: MutableCollection<(T) -> Unit>, firstRunValue: T, listener: (T) -> Unit) {
     connect(object : LifecycleListener {
         override fun onStart() {
