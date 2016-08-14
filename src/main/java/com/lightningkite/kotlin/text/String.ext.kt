@@ -75,3 +75,19 @@ fun String.toLongMaybe(default: Long): Long {
         return default
     }
 }
+
+fun String.toByte(radix: Int): Byte {
+    return java.lang.Byte.parseByte(this, radix)
+}
+
+fun String.toShort(radix: Int): Short {
+    return java.lang.Short.parseShort(this, radix)
+}
+
+fun String.toInt(radix: Int): Int {
+    return java.lang.Integer.parseInt(this, radix)
+}
+
+fun String.toLong(radix: Int): Long {
+    return java.lang.Long.parseLong(this, radix)
+}
