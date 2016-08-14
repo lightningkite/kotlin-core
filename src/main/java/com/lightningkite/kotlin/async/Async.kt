@@ -28,6 +28,28 @@ object Async {
     }
 }
 
+inline fun <T> (() -> T).invokeAsync() {
+    Async.threadPool.execute({
+        invoke()
+    })
+}
+
+inline fun (() -> Unit).invokeUIThread() {
+    Async.uiThreadInterface.sendToThread(this)
+}
+
+@JvmName("invokeUIThreadT")
+inline fun <T> (() -> T).invokeUIThread() {
+    Async.uiThreadInterface.sendToThread { invoke() }
+}
+
+inline fun <T> (() -> T).invokeAsync(crossinline callback: (T) -> Unit) {
+    Async.threadPool.execute({
+        val result = invoke()
+        Async.uiThreadInterface.sendToThread { callback.invoke(result) }
+    })
+}
+
 /**
  * Runs [action] asynchronously.
  * @param action The lambda to run asynchronously.
