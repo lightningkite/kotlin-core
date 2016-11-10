@@ -2,6 +2,8 @@
 
 This package is not Android-specific, and can be used across platforms.
 
+This package is meant to contain a collection of useful extensions on both the standard library and the Java standard library.
+
 ## Overall Philosophy
 
 *Complete reuse:*  Everything that is commonly used should be included, preferably as an inline 
