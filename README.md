@@ -1,6 +1,6 @@
 # kotlin-core
 
-This package is not Android-specific, and can be used across platforms.
+This package is not Android-specific, and can be used across platforms.  However, for a good example of use in Android, take a look at [kotlin-components-starter](https://github.com/UnknownJoe796/kotlin-components-starter).
 
 This package is meant to contain a collection of useful extensions on both the standard library and the Java standard library.
 
