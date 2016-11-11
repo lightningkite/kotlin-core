@@ -4,6 +4,17 @@ This package is not Android-specific, and can be used across platforms.  However
 
 This package is meant to contain a collection of useful extensions on both the standard library and the Java standard library.
 
+## Related Repositories
+
+- [kotlin-observable](https://github.com/UnknownJoe796/kotlin-observable) - Observable properties and lists
+- [kotlin-networking](https://github.com/UnknownJoe796/kotlin-networking) - Convenient networking with OkHTTP
+- [kotlin-anko](https://github.com/UnknownJoe796/kotlin-anko) - Android layouts with Anko
+- [kotlin-anko-view-controllers](https://github.com/UnknownJoe796/anko-view-controllers) - Replace activites with a more convenient alternative, view controllers.  Removes all of the struggles of retaining data between view creations and passing information to different screens.
+- [kotlin-anko-observable](https://github.com/UnknownJoe796/kotlin-anko-observable) - Combining Anko with Observables
+- [kotlin-anko-networking](https://github.com/UnknownJoe796/kotlin-anko-networking) - Combining Anko with networking
+- [kotlin-anko-full](https://github.com/UnknownJoe796/kotlin-anko-full) - Uses all of the above packages
+- [kotlin-components-starter](https://github.com/UnknownJoe796/kotlin-components-starter) - Example Android project
+
 ## Overall Philosophy
 
 *Minimality:*  When possible, these libraries don't create new structure.  Instead, they use extension functions to let you use current objects and classes in a more convenient and expected way.
