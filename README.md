@@ -6,6 +6,8 @@ This package is meant to contain a collection of useful extensions on both the s
 
 ## Overall Philosophy
 
+*Minimality:*  When possible, these libraries don't create new structure.  Instead, they use extension functions to let you use current objects and classes in a more convenient and expected way.
+
 *Complete reuse:*  Everything that is commonly used should be included, preferably as an inline 
 extension function to reduce the app's method count.
 
