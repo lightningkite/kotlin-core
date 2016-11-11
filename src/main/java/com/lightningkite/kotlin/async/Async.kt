@@ -1,5 +1,6 @@
 package com.lightningkite.kotlin.async
 
+import java.util.concurrent.Future
 import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.ThreadPoolExecutor
 import java.util.concurrent.TimeUnit
@@ -33,6 +34,8 @@ inline fun <T> (() -> T).invokeAsync() {
         invoke()
     })
 }
+
+inline fun <T> (() -> T).invokeAsyncFuture(): Future<T> = Async.threadPool.submit(this)
 
 inline fun (() -> Unit).invokeUIThread() {
     Async.uiThreadInterface.sendToThread(this)
@@ -88,6 +91,34 @@ fun doUiThread(action: () -> Unit) {
     Async.uiThreadInterface.sendToThread(action)
 }
 
+fun <A, B> parallel(a: () -> A, b: () -> B): () -> Pair<A, B> {
+    return {
+        val futureA = a.invokeAsyncFuture()
+        val futureB = b.invokeAsyncFuture()
+        futureA.get() to futureB.get()
+    }
+}
+
+fun <A, B, C> parallel(a: () -> A, b: () -> B, c: () -> C): () -> Triple<A, B, C> {
+    return {
+        val futureA = a.invokeAsyncFuture()
+        val futureB = b.invokeAsyncFuture()
+        val futureC = c.invokeAsyncFuture()
+        Triple(futureA.get(), futureB.get(), futureC.get())
+    }
+}
+
+@JvmName("parallelShorthand")
+fun <T> List<() -> T>.parallel(): () -> List<T> = parallel(this)
+
+fun <T> parallel(tasks: List<() -> T>): () -> List<T> {
+    return {
+        tasks.map { it.invokeAsyncFuture() }.map { it.get() }
+    }
+}
+
+
+//Weird async stuff below
 
 inline fun <T> List<T>.withEachAsync(doTask: T.(() -> Unit) -> Unit, crossinline onAllComplete: () -> Unit) {
     if (isEmpty()) {
@@ -128,7 +159,7 @@ inline fun <T, MUTABLE, RESULT> List<T>.withReduceAsync(
     }
 }
 
-inline fun parallel(tasks: Collection<(() -> Unit) -> Unit>, crossinline onComplete: () -> Unit) {
+inline fun parallelAsyncs(tasks: Collection<(() -> Unit) -> Unit>, crossinline onComplete: () -> Unit) {
     if (tasks.isEmpty()) {
         onComplete()
         return
@@ -144,7 +175,7 @@ inline fun parallel(tasks: Collection<(() -> Unit) -> Unit>, crossinline onCompl
     }
 }
 
-inline fun parallel(vararg tasks: (() -> Unit) -> Unit, crossinline onComplete: () -> Unit) {
+inline fun parallelAsyncs(vararg tasks: (() -> Unit) -> Unit, crossinline onComplete: () -> Unit) {
     if (tasks.isEmpty()) {
         onComplete()
         return
