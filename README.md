@@ -9,7 +9,7 @@ This package is meant to contain a collection of useful extensions on both the s
 - [kotlin-observable](https://github.com/UnknownJoe796/kotlin-observable) - Observable properties and lists
 - [kotlin-networking](https://github.com/UnknownJoe796/kotlin-networking) - Convenient networking with OkHTTP
 - [kotlin-anko](https://github.com/UnknownJoe796/kotlin-anko) - Android layouts with Anko
-- [kotlin-anko-view-controllers](https://github.com/UnknownJoe796/anko-view-controllers) - Replace activites with a more convenient alternative, view controllers.  Removes all of the struggles of retaining data between view creations and passing information to different screens.
+- [kotlin-anko-view-controllers](https://github.com/UnknownJoe796/kotlin-anko-view-controllers) - Replace activites with a more convenient alternative, view controllers.  Removes all of the struggles of retaining data between view creations and passing information to different screens.
 - [kotlin-anko-observable](https://github.com/UnknownJoe796/kotlin-anko-observable) - Combining Anko with Observables
 - [kotlin-anko-networking](https://github.com/UnknownJoe796/kotlin-anko-networking) - Combining Anko with networking
 - [kotlin-anko-full](https://github.com/UnknownJoe796/kotlin-anko-full) - Uses all of the above packages
