@@ -1,6 +1,8 @@
 package com.lightningkite.kotlin.stream
 
 import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileOutputStream
 import java.io.InputStream
 import java.nio.charset.Charset
 
@@ -16,6 +18,30 @@ fun InputStream.toByteArray(): ByteArray {
         return output.toByteArray()
     } finally {
         output.close()
+    }
+}
+
+fun InputStream.writeToFile(file: File) {
+    val fos = FileOutputStream(file)
+    try {
+        val data = ByteArray(1024)
+        var total: Long = 0
+        while (true) {
+            val count = this.read(data)
+            if (count == -1) break
+            total += count.toLong()
+            fos.write(data, 0, count)
+        }
+        fos.flush()
+    } finally {
+        try {
+            fos.close()
+        } catch (e: Exception) {/*squish*/
+        }
+        try {
+            this.close()
+        } catch (e: Exception) {/*squish*/
+        }
     }
 }
 
