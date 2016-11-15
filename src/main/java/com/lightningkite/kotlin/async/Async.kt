@@ -1,9 +1,6 @@
 package com.lightningkite.kotlin.async
 
-import java.util.concurrent.Future
-import java.util.concurrent.LinkedBlockingQueue
-import java.util.concurrent.ThreadPoolExecutor
-import java.util.concurrent.TimeUnit
+import java.util.concurrent.*
 
 /**
  * Various functions to do things asynchronously.
@@ -112,8 +109,19 @@ fun <A, B, C> parallel(a: () -> A, b: () -> B, c: () -> C): () -> Triple<A, B, C
 fun <T> List<() -> T>.parallel(): () -> List<T> = parallel(this)
 
 fun <T> parallel(tasks: List<() -> T>): () -> List<T> {
-    return {
-        tasks.map { it.invokeAsyncFuture() }.map { it.get() }
+    if (tasks.isEmpty()) return { listOf() }
+    else {
+        return {
+            val results = tasks.subList(0, tasks.size - 1).map {
+                val future = FutureTask {
+                    it.invoke()
+                }
+                Thread(future).start()
+                future
+            }.map { it.get() }.toMutableList()
+            results += tasks.last().invoke()
+            results
+        }
     }
 }
 
