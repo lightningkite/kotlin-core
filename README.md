@@ -23,7 +23,7 @@ This package is meant to contain a collection of useful extensions on both the s
 extension function to reduce the app's method count.
 
 *Intuitiveness:*  Use inline extension functions to make common tasks simple, such as requesting a 
-photo from the user.  In standard Android, doing this properly would take at least a large file by 
+photo from the organization.  In standard Android, doing this properly would take at least a large file by
 itself.  We have extension functions that do it in one line.
 
 ## What this package contains
