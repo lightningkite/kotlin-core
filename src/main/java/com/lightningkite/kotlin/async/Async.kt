@@ -20,9 +20,7 @@ object Async {
             runnableQueue
     );
     var uiThreadInterface: AsyncInterface = object : AsyncInterface {
-        override fun sendToThread(action: () -> Unit) {
-            doAsync(action)
-        }
+        override fun sendToThread(action: () -> Unit) = doAsync(action)
     }
 }
 
@@ -90,17 +88,32 @@ fun doUiThread(action: () -> Unit) {
 
 fun <A, B> parallel(a: () -> A, b: () -> B): () -> Pair<A, B> {
     return {
-        val futureA = a.invokeAsyncFuture()
-        val futureB = b.invokeAsyncFuture()
+        val futureA = FutureTask {
+            a.invoke()
+        }
+        val futureB = FutureTask {
+            b.invoke()
+        }
+        Thread(futureA).start()
+        Thread(futureB).start()
         futureA.get() to futureB.get()
     }
 }
 
 fun <A, B, C> parallel(a: () -> A, b: () -> B, c: () -> C): () -> Triple<A, B, C> {
     return {
-        val futureA = a.invokeAsyncFuture()
-        val futureB = b.invokeAsyncFuture()
-        val futureC = c.invokeAsyncFuture()
+        val futureA = FutureTask {
+            a.invoke()
+        }
+        val futureB = FutureTask {
+            b.invoke()
+        }
+        val futureC = FutureTask {
+            c.invoke()
+        }
+        Thread(futureA).start()
+        Thread(futureB).start()
+        Thread(futureC).start()
         Triple(futureA.get(), futureB.get(), futureC.get())
     }
 }
