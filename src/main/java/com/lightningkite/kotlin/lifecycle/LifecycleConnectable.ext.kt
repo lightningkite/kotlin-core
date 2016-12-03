@@ -71,3 +71,16 @@ fun <T> LifecycleConnectable.bind(event: MutableCollection<(T) -> Unit>, firstRu
         }
     })
 }
+
+fun LifecycleConnectable.bind(event: MutableCollection<() -> Unit>, listener: () -> Unit) {
+    connect(object : LifecycleListener {
+        override fun onStart() {
+            event.add(listener)
+            listener()
+        }
+
+        override fun onStop() {
+            event.remove(listener)
+        }
+    })
+}

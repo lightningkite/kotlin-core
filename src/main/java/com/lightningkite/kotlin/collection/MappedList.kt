@@ -1,5 +1,7 @@
 package com.lightningkite.kotlin.collection
 
+import java.util.*
+
 /**
  * Created by jivie on 6/14/16.
  */
@@ -50,3 +52,21 @@ class MappedMutableList<S, T>(val around: MutableList<S>, val mapper: (S) -> T, 
 }
 
 fun <S, T> MutableList<S>.mappingMutable(mapper: (S) -> T, reverseMapper: (T) -> S): MutableList<T> = MappedMutableList(this, mapper, reverseMapper)
+inline fun <S, T> MutableList<S>.mappingMutableHash(crossinline mapper: (S) -> T): MutableList<T> {
+    val forward = WeakHashMap<S, T>()
+    val reverse = WeakHashMap<T, S>()
+    return MappedMutableList<S, T>(
+            this,
+            mapper = {
+                val current = forward[it]
+                if (current != null) return@MappedMutableList current
+                val mapped = mapper(it)
+                forward.put(it, mapped)
+                reverse.put(mapped, it)
+                mapped
+            },
+            reverseMapper = {
+                reverse[it]!!
+            }
+    )
+}
