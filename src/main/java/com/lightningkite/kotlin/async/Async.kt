@@ -125,15 +125,19 @@ fun <T> parallel(tasks: List<() -> T>): () -> List<T> {
     if (tasks.isEmpty()) return { listOf() }
     else {
         return {
-            val results = tasks.subList(0, tasks.size - 1).map {
-                val future = FutureTask {
-                    it.invoke()
-                }
-                Thread(future).start()
-                future
-            }.map { it.get() }.toMutableList()
-            results += tasks.last().invoke()
-            results
+            try {
+                val results = tasks.subList(0, tasks.size - 1).map {
+                    val future = FutureTask {
+                        it.invoke()
+                    }
+                    Thread(future) to future
+                }.map { it.first.start(); it.second }.map { it.get() }.toMutableList()
+                results += tasks.last().invoke()
+                results
+            } catch(e: Exception) {
+                e.printStackTrace()
+                tasks.map { it() }
+            }
         }
     }
 }
