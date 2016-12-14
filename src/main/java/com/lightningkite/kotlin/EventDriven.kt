@@ -5,31 +5,31 @@ package com.lightningkite.kotlin
  * Created by josep on 5/31/2016.
  */
 
-inline fun Collection<() -> Unit>.runAll() {
+inline fun Iterable<() -> Unit>.runAll() {
     for (item in this) {
         item()
     }
 }
 
-inline fun <A> Collection<(A) -> Unit>.runAll(a: A) {
+inline fun <A> Iterable<(A) -> Unit>.runAll(a: A) {
     for (item in this) {
         item(a)
     }
 }
 
-inline fun <A, B> Collection<(A, B) -> Unit>.runAll(a: A, b: B) {
+inline fun <A, B> Iterable<(A, B) -> Unit>.runAll(a: A, b: B) {
     for (item in this) {
         item(a, b)
     }
 }
 
-inline fun <A, B, C> Collection<(A, B, C) -> Unit>.runAll(a: A, b: B, c: C) {
+inline fun <A, B, C> Iterable<(A, B, C) -> Unit>.runAll(a: A, b: B, c: C) {
     for (item in this) {
         item(a, b, c)
     }
 }
 
-inline fun <A, B, C, D> Collection<(A, B, C, D) -> Unit>.runAll(a: A, b: B, c: C, d: D) {
+inline fun <A, B, C, D> Iterable<(A, B, C, D) -> Unit>.runAll(a: A, b: B, c: C, d: D) {
     for (item in this) {
         item(a, b, c, d)
     }
