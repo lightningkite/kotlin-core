@@ -1,5 +1,6 @@
 package com.lightningkite.kotlin.async
 
+import java.util.*
 import java.util.concurrent.*
 
 /**
@@ -8,17 +9,20 @@ import java.util.concurrent.*
  */
 
 object Async {
-    val runnableQueue = LinkedBlockingQueue<Runnable>();
-    private val NUMBER_OF_CORES: Int = Runtime.getRuntime().availableProcessors();
-    private val KEEP_ALIVE_TIME: Long = 1;
-    private val KEEP_ALIVE_TIME_UNIT: TimeUnit = TimeUnit.SECONDS;
-    val threadPool = ThreadPoolExecutor(
+    val NUMBER_OF_CORES: Int = Runtime.getRuntime().availableProcessors()
+    val KEEP_ALIVE_TIME: Long = 1
+    val KEEP_ALIVE_TIME_UNIT: TimeUnit = TimeUnit.SECONDS
+    fun generateThreadPool(queue: LinkedBlockingQueue<Runnable>) = ThreadPoolExecutor(
             NUMBER_OF_CORES, // Initial pool size
             NUMBER_OF_CORES, // Max pool size
             KEEP_ALIVE_TIME,
             KEEP_ALIVE_TIME_UNIT,
-            runnableQueue
-    );
+            queue
+    )
+
+    val runnableQueue = LinkedBlockingQueue<Runnable>()
+    val threadPool = generateThreadPool(runnableQueue)
+
     var uiThreadInterface: AsyncInterface = object : AsyncInterface {
         override fun sendToThread(action: () -> Unit) = doAsync(action)
     }
@@ -118,12 +122,25 @@ fun <A, B, C> parallel(a: () -> A, b: () -> B, c: () -> C): () -> Triple<A, B, C
     }
 }
 
-@JvmName("parallelShorthand")
+fun <T> parallelNonblocking(tasks: List<() -> T>, onAllComplete: (List<T>) -> Unit) {
+    if (tasks.isEmpty()) onAllComplete(listOf())
+    val items = ArrayList<T>()
+    for (task in tasks) {
+        task.invokeAsync {
+            items.add(it)
+            if (items.size == tasks.size) {
+                onAllComplete(items)
+            }
+        }
+    }
+}
+
+@JvmName("parallelBlockingShorthand")
 fun <T> List<() -> T>.parallel(): () -> List<T> = parallel(this)
 
 fun <T> parallel(tasks: List<() -> T>): () -> List<T> {
     if (tasks.isEmpty()) return { listOf() }
-    else {
+    else if (tasks.size < Async.NUMBER_OF_CORES) {
         return {
             try {
                 val results = tasks.subList(0, tasks.size - 1).map {
@@ -132,6 +149,21 @@ fun <T> parallel(tasks: List<() -> T>): () -> List<T> {
                     }
                     Thread(future) to future
                 }.map { it.first.start(); it.second }.map { it.get() }.toMutableList()
+                results += tasks.last().invoke()
+                results
+            } catch(e: Exception) {
+                e.printStackTrace()
+                tasks.map { it() }
+            }
+        }
+    } else {
+        return {
+            val queue = LinkedBlockingQueue<Runnable>()
+            val pool = Async.generateThreadPool(queue)
+            try {
+                val results = tasks.subList(0, tasks.size - 1).map {
+                    pool.submit(it)
+                }.map { it.get() }.toMutableList()
                 results += tasks.last().invoke()
                 results
             } catch(e: Exception) {
