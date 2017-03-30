@@ -8,27 +8,27 @@ package com.lightningkite.kotlin.math
 /**
  * Degrees from this angle (in degrees) to another angle (in degrees).
  */
-fun Float.degreesTo(to: Float): Float {
+infix fun Float.degreesTo(to: Float): Float {
     return ((to - this + 180).remainder(360f)) - 180
 }
 
 /**
  * Radians from this angle (in radians) to another angle (in radians).
  */
-fun Float.radiansTo(to: Float): Float {
+infix fun Float.radiansTo(to: Float): Float {
     return (((to - this + Math.PI).remainder(Math.PI * 2)) - Math.PI).toFloat()
 }
 
 /**
  * Degrees from this angle (in degrees) to another angle (in degrees).
  */
-fun Double.degreesTo(to: Double): Double {
+infix fun Double.degreesTo(to: Double): Double {
     return ((to - this + 180).remainder(360.0)) - 180
 }
 
 /**
  * Radians from this angle (in radians) to another angle (in radians).
  */
-fun Double.radiansTo(to: Double): Double {
+infix fun Double.radiansTo(to: Double): Double {
     return ((to - this + Math.PI).remainder(Math.PI * 2)) - Math.PI
 }
