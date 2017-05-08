@@ -36,11 +36,11 @@ fun InputStream.writeToFile(file: File) {
     } finally {
         try {
             fos.close()
-        } catch (e: Exception) {/*squish*/
+        } catch (e: Throwable) {/*squish*/
         }
         try {
             this.close()
-        } catch (e: Exception) {/*squish*/
+        } catch (e: Throwable) {/*squish*/
         }
     }
 }
