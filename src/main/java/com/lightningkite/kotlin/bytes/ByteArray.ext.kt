@@ -9,8 +9,9 @@ inline fun ByteArray.toStringHex(): String {
     val hexChars = CharArray(size * 2)
     var index = 0
     for (byte in this) {
-        hexChars[index * 2] = hexArray[byte.toInt() ushr 4]
-        hexChars[index * 2 + 1] = hexArray[byte.toInt() and 0x0F]
+        val ubyte = (byte.toInt() and 0xFF)
+        hexChars[index * 2] = hexArray[ubyte ushr 4]
+        hexChars[index * 2 + 1] = hexArray[ubyte and 0x0F]
         index++
     }
     return String(hexChars)
