@@ -1,6 +1,7 @@
 package com.lightningkite.kotlin.lambda
 
 /**
+ *
  * Created by joseph on 11/14/16.
  */
 @Deprecated("Use 'transform' instead.", ReplaceWith("transform(mapper)"))

@@ -1,6 +1,7 @@
 package com.lightningkite.kotlin.lambda
 
 /**
+ *
  * Created by joseph on 9/2/16.
  */
 class CooldownLambda(val time: Long, val inner: () -> Unit) : () -> Unit {
