@@ -6,7 +6,7 @@ package com.lightningkite.kotlin.text
  */
 
 
-val EmailRegularExpression: Regex = "[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}".toRegex(RegexOption.IGNORE_CASE)
+val EmailRegularExpression: Regex = "[a-z0-9!#\$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#\$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?".toRegex(RegexOption.IGNORE_CASE)
 
 inline fun String.isEmail(): Boolean {
     return matches(EmailRegularExpression)
