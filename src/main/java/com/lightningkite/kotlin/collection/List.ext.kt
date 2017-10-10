@@ -10,7 +10,6 @@ import java.util.*
 inline fun <E> List<E>.random(): E {
     return this[Math.random().times(size).toInt()]
 }
-
 fun <E> SetupList(setup: (E) -> Unit): MutableList<E> {
     return object : ArrayList<E>() {
         override fun addAll(index: Int, elements: Collection<E>): Boolean {
