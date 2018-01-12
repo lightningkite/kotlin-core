@@ -3,10 +3,10 @@ package com.lightningkite.kotlin.collection
 import java.util.*
 
 /**
+ * Maps a collection to a different type for writing only.
+ *
  * Created by joseph on 12/14/16.
  */
-
-
 class CollectionWriteOnlyMapping<S, E>(val source: MutableCollection<S>, val inputMapper: (E) -> S) : MutableCollection<E> {
     val map = HashMap<E, S>()
 
