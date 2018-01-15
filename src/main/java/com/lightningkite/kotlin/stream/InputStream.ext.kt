@@ -1,5 +1,6 @@
 package com.lightningkite.kotlin.stream
 
+import java.io.File
 import java.io.InputStream
 import java.nio.charset.Charset
 
@@ -15,4 +16,13 @@ fun InputStream.toByteArray(estimatedSize: Int = DEFAULT_BUFFER_SIZE): ByteArray
  */
 fun InputStream.toString(estimatedSize: Int = DEFAULT_BUFFER_SIZE, charset: Charset = Charsets.UTF_8): String = use {
     this.reader(charset).readText()
+}
+
+/**
+ * Writes the stream into the file and closes it.
+ */
+fun File.writeStream(stream: InputStream) = outputStream().use { outputStream ->
+    stream.use { inputStream ->
+        inputStream.copyTo(outputStream)
+    }
 }
