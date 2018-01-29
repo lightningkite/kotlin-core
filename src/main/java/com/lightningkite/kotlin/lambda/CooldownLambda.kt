@@ -15,4 +15,4 @@ class CooldownLambda(val time: Long, val inner: () -> Unit) : () -> Unit {
     }
 }
 
-inline fun (() -> Unit).cooldown(time: Long): () -> Unit = CooldownLambda(time, this)
+fun (() -> Unit).cooldown(time: Long): () -> Unit = CooldownLambda(time, this)
